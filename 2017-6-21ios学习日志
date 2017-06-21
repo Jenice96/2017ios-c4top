@@ -1,0 +1,38 @@
+1、command+K可以打开或关闭模拟器的键盘调用
+
+2、String转换为int：Int（）
+     
+     toInt( ) 会报错，但是网上说可以。
+
+3、为组件添加属性：control+左键（outlet）
+     
+     为组件添加方法：control+左键（action）
+
+4、重写touchesEnded()方法可以使得键盘在失去焦点后消失：
+
+override  func  touchesEnded(touches:Set<UITouch>,withEvent event:UIEvent?){
+     yearOfBirth.resignFirstResponder()
+}
+
+5、点击next关闭键盘：
+
+第一步：viewController继承UITextFieldDelegate
+
+class viewController:UIViewController,UITextFieldDelegate{
+}
+
+第二步：实现UITextFieldDelegate的方法textFieldShouldReturn()：
+
+func textFieldShouldReturn(textField:UITextField)->Bool{
+     textField.resignFirstResponder()     //失去焦点
+     return true
+}
+
+第三步：在viewDidLoad()方法中设置代理：
+
+override func viewDidLoad(){
+     super.viewDidLoad()
+     name.delegate = self     //name为textfield的名字
+}
+
+
