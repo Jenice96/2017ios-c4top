@@ -1,0 +1,48 @@
+1、整型：int、UInt、Int8、Int16、Int31、Int64
+
+2、浮点型：float、double、CGFloat
+
+3、注意：swift中没有隐式转换，所有类型转换都需要强制转换，如：
+
+ var imFloat:float = 3.0;
+     var imdouble = Double(imFloat);
+
+4、swift中非零值不能作为true，因为仅仅是int型，不会自动类型转换。
+
+     if 后面的括号可以省略，()展示表示优先级
+
+     xCode编译器会有提示是否冗余。
+
+5、元组：tuple
+
+var point = (5,2)
+相当于：
+var point:(int ,int) = (5,2)
+使用：let (x, y) = point
+
+var HttpResponse = (404, "Not Found")
+相当于：
+var HttpResponse :(int , String) = (404, "Not Found")
+使用：let (statusCode, statusMessage) = HttpResponse
+
+为元组中的每一项命名：
+
+let point = (x : 3 , y : 2)
+或者：
+let point : ( x : int , y : int ) = (10, 5)
+使用：point.x     point.y
+
+ 如果仅仅对部分变量有兴趣，那么可以只对感兴趣的变量进行命名，对不感兴趣的变量用“_”来进行占位。
+
+6、String：用“”将文本引起即可。
+
+7、特性：
+     
+swift中变量名可以使用中文，甚至是Unicode的任意符号。
+
+print():可以直接将多个变量输出：print(x, y, z)默认用空格将三个变量分隔开
+          可以选择分隔符：print( x, y, z, separator : " , ")即可以用“,”将三个变量值分隔开
+          可以选择结束符：print( x, y, z, terminator: " : ）")即可以用该符号作为结束符，默认是回车，但是如果设置了，那么将不会有回车。
+          字符串插值：打印数学表达式：print( " \(y) * \(z) = \(y*z) " )即：用“\( 变量名)” 输出变量值。
+
+swift中可以多行注释嵌套。

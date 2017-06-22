@@ -1,0 +1,154 @@
+9、变量赋初值：
+
+对于let 或者var，都可以不赋初值，可以根据条件来赋初值。
+
+但是必须在赋初值后才能进行使用，否则会报错。
+
+10、区间运算符：
+
+闭区间运算符：[ a, b] ：表示a...b
+
+前闭后开运算符： [ a, b) ：表示a..<b
+
+for...in：
+for index in 1...10{
+     index     //此处的index是一个常量
+}
+
+注意：for... in循环要求必须将in后面范围的值全部遍历一遍。
+
+11、数组：
+
+let courses = ["课程一","课程二","课程三","课程四"]
+遍历：
+for i in 0..<courses.count{
+     print( courses[i])
+}
+
+12、循环：
+
+for...in循环：适用于in后面每一次都要执行的情况
+
+for循环：
+for  initialization; condition; increment{
+     statement
+}
+
+while循环：适用于不知道循环次数的情况
+initialization
+while condition{
+     statements
+     increments
+}
+
+repeat-while循环：至少执行一次
+initialization
+repeat{
+     statements
+     increments
+}while condition
+
+
+13、条件语句：
+
+if     condition{
+     statements
+}else     if     condition2{
+     statements
+}else{
+     statements
+}
+
+
+switch     some value to consider{
+     case value1：respond to value1
+     case value2：respond to value2   
+     case value3：respond to value3
+     case value4：respond to value4
+     default: otherwise,do something else
+}
+
+注意switch..case没有break，因此每一个case必须至少一句语句，否则会报错。
+
+但是，可以用另一种情况来代替：
+
+switch rating：{
+case “a”，“A”：
+     print（“Great！”）
+case “B”：
+     print（“Just so-so”）
+default：
+     print（“error”）
+}
+
+switch 后面可以判断字符串、浮点数、布尔值等各种数据结构。
+
+swift中必须穷举所有可能的情况，如果不能穷举完全，必须包含default语句，否则报错。
+如果default中不做任何事情，那么有两种方法可以解决：
+（1）break跳出；（2）用“（）”来代表空语句。
+注意：在swift中“；”不能代表空语句。
+
+如果switch语句判断布尔值，可以没有default，但是必须有case true和case false。
+
+swift中新增了一个关键字“fallthrough”，来使得当满足一个case后仍可以跳到下一个case进行判断。
+
+
+14、控制转移：break；continue；fallthrough（只能使用在switch语句中）；return；throw；
+
+break和continue都可以在后面添加一个名字，来实现控制跳转，一般是跳出循环跳转。
+
+15、where：case语句中添加条件，并且case也可以放在if语句中。
+例如：
+if  case  10...19 = age{
+     print（“you are a teenager！”）
+}
+
+加上where限定条件：
+if  case  10...19 = age where age>=18{
+     print（“you are a teenager and in a college！ ”）
+}
+
+
+16、guard：边界检验
+
+可以先将边界进行判断，再进行主体程序的书写。
+
+
+17、Charater：任何Unicode字符都可以表示成一个Charater。
+
+     var  char = “count”
+     char.charaters.count（）可以获取字符串的长度
+     
+let startIndex = str.startIndex
+str[startIndex]     //获取开始索引的字符
+
+str[startIndex.advancedBy(5)]     //获取第5个字符
+str[endIndex.advancedBy(-2)]     //获取从后向前的两个字符串
+
+注意：endIndex不是字符串的最后一个字符，[startIndex,endIndex)是字符串的范围。
+str[endIndex.predecessor()]获取的是最后一个字符
+
+也可以使用区间运算符：
+
+str[startIndex..<spaceIndex]可以获取指定区间的字符串
+
+let range = startIndex..<spaceIndex.predecessor()这样range是一个Range<Index>的类型
+
+18、NSString：
+
+可以使用占位符，并且库函数比String要强大。
+
+但是NSString不能隐式转换为String，可以在后面使用as将NSString转换为String，反过来转换也是可以的。
+如：
+
+let s:String = NSString(format:"one third is %0.2f", 1.0/3.0) as String
+
+NSString根据索引获取指定字符串是可以直接使用int型获取，但是如果字符串中包含大量中文或其他unicode，是不能处理的。
+
+NSString的长度获取：str.length
+
+NSString中有但是在String中没有的一个函数：
+去除冗余：
+let  s = "  ---- Hello ---    "  as  NSString
+s.stringTrimmingCharaterInSet(NSCharaterSet(charaterInString:" -"))     //相当于去除了空格和“-”
+ 
