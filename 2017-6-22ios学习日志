@@ -1,0 +1,178 @@
+6、PickerView的使用：
+
+第一步：
+
+在ViewController.swift中声明变量：
+@IBOutlet weak var beautyPicker: UIPickerView!
+
+声明一个数组，用来存放要在PickerView中显示的内容。
+let beauties = ["杨幂","刘诗诗","高圆圆","乔欣"]
+
+第二步：
+
+创建ViewControllerExtension.swift文件，该文件是ViewController的扩展。
+
+在该文件中实现两个协议：UIPickerViewDataSource和UIPickerViewDelegate。
+
+第三步：
+
+在继承的UIPickerViewDataSource中实现两个必须实现的方法：这个协议显示的是静态数据
+
+  // returns the number of 'columns' to display.
+  @available(iOS 2.0, *)
+  func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int{
+        return 1
+  }
+
+  // returns the # of rows in each component..
+  @available(iOS 2.0, *)
+  func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int{
+        return beauties.count
+  }
+
+在继承的UIPickerViewDelegate中实现可选方法：这个方法可以动态显示
+
+extension ViewController:UIPickerViewDelegate{
+  @available(iOS 2.0, *)
+  func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String?{
+        return beauties[row]
+  }
+}
+
+第四步：
+
+在ViewController.swift文件中的viewDidLoad()方法中声明pickerView的处理方式：
+
+override func viewDidLoad() {
+  super.viewDidLoad()
+  // Do any additional setup after loading the view, typically from a nib.
+  //self表示是ViewController来对pickerView进行处理
+  beautyPicker.dataSource = self
+  beautyPicker.delegate = self
+}
+
+第五步：
+
+实现在两个viewController之间传递数据（在本例中传递的是imageName）
+
+为两个viewController之间的桥梁segue进行命名，这样的好处是：当有多个跳转时，可以不产生混乱。
+
+重写prepareForSegue()方法，实现两个viewController之间的跳转：（这个方法在跳转前的文件中。）
+
+  //当数据从一个viewController传递到另一个viewController时调用该方法
+  override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+             //GoToGallery就是两个viewController之间的segue名字
+  if segue.identifier == "GoToGallery" {
+  let index = beautyPicker.selectedRowInComponent(0)
+
+  var imageName : String?
+  switch index {
+  case 0:
+  imageName = "0杨幂"
+  case 1:
+  imageName = "1刘诗诗"
+  case 2:
+  imageName = "2高圆圆"
+  case 3:
+  imageName = "3乔欣"
+  default:
+  imageName = nil
+  }
+
+  //将数据传递给要传递的viewController
+  let vc = segue.destinationViewController as! GalleryViewController
+  vc.imageName = imageName
+  }
+  }
+
+第六步：
+
+在跳转到的viewController中接收数据：（在本例中是GalleryViewController.swift）
+
+  //声明变量，用于接受传递过来的数据
+  var imageName:String?
+  //绑定组件
+  @IBOutlet weak var beautyImage: UIImageView!
+
+  override func viewDidLoad() {
+  super.viewDidLoad()
+  // Do any additional setup after loading the view, typically from a nib.
+
+  if imageName != nil{
+            beautyImage.image = UIImage(named: imageName!)     //根据图片名字显示图片
+  }
+  }
+
+第七步：
+
+实现返回。
+
+可以在跳转前的viewController.swift中定义一个动作方法，然后在跳转后要进行返回的viewController中将控件和上方的Exit相连并找到感刚刚定义的返回的方法即可。
+
+这个方法的好处是：可以实现两个ViewController之间的双向数据传输。
+
+  //实现返回的方法，返回前若有数据传回来，数据保存在segue之中。
+  @IBAction func close(segue:UIStoryboardSegue){
+      return
+  }
+
+详情可以参考unwind segue。
+
+7、navigation controller的使用：
+
+第一步：
+
+在Editor菜单项中选择Embed in中的navigation controller可以生成一个导航栏。
+
+如果想让后面的ViewController都有导航栏，那么需要将segue的kind设置为push即可。
+注意，如果在没有使用navigation controller的情况下，将其设置为push会报错。
+
+第二步：
+
+直接双击导航栏中间部分可以进行标题的编写，也可已通过代码来进行动态编写：
+
+navigationItem.title = "标题"
+注意，这部分应该写在viewDidLoad()方法中。
+
+动态进行编写的示例：
+override func viewDidLoad() {
+  super.viewDidLoad()
+  // Do any additional setup after loading the view, typically from a nib.
+
+       if let name = imageName {
+  beautyImage.image = UIImage(named: name)
+  switch name {
+  case "0杨幂":
+  navigationItem.title = "杨幂"
+  case "1刘诗诗":
+  navigationItem.title = "刘诗诗"
+  case "2高圆圆":
+  navigationItem.title = "高圆圆"
+  case "3乔欣":
+  navigationItem.title = "乔欣"
+  default:
+  return
+  }
+  }
+}
+
+8、分享功能：
+
+Ios自带了一些分享社交软件的功能：
+首先需要导入Social framework
+
+import Social
+
+然后在需要的事件方法中进行代码编写：
+@IBAction func shareTapped(sender: AnyObject) {
+  //创建controller
+  let controller:SLComposeViewController = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
+  //设置分享的初始文本和图片
+  controller.setInitialText("一起来玩女神画廊的APP吧")
+  controller.addImage(beautyImage.image)
+  //展示分享框
+  self.presentViewController(controller, animated: true, completion: nil)
+
+  }
+
+例如国内用到的一些社交app建议使用其他的sdk进行开发。
